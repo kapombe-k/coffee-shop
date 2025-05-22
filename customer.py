@@ -20,3 +20,30 @@ class Customer:
     def coffees(self):
         # Returns a unique list of Coffee instances this customer has ordered
         return list(set(order.coffee for order in self.orders()))
+    
+    def create_order(self, coffee, price):
+        from order import Order #import happens here avoiding circulation
+        # here we create a new order and then return it directly
+        return Order(self, coffee, price)
+    
+    @classmethod
+    def most_aficianado(cls, coffee):
+        # this will be the class method to find a customer who has spent most on x coffee
+        from order import Order 
+        # get all orders of given coffee
+        coffee_orders = [order for order in Order._all_orders if order.coffee==coffee]
+
+        if not coffee_orders:
+            return None
+        
+        #make a dict to track spending per customer
+        customer_spending={}
+        for order in coffee_orders:
+            customer=order.customer
+            if customer in customer_spending:
+                customer_spending[customer] += order.price
+            else:
+                customer_spending[customer]=order.price
+
+        #Return the customer with the highest total spending
+        return max(customer_spending, key=customer_spending.get)
