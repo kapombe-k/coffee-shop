@@ -7,6 +7,7 @@ class Coffee:
 
     @property
     def name(self):
+        # this getter method returns the coffee name as a string
         return self._name
 
     def orders(self):
@@ -17,3 +18,20 @@ class Coffee:
     def customers(self):
         # Return a unique list of Customer instances who ordered this coffee
         return list(set(order.customer for order in self.orders()))
+    
+    def num_orders(self):
+        #returns total orders for this coffee
+        #uses the orders() method to get the count
+        return len(self.orders())
+    
+    def average_price(self):
+        #returns average price of all orders
+        #0.0 is returned of no orders are provided
+
+        orders = self.orders()
+        if not orders:  #if no prders are provided return 0.0
+            return 0.0
+        
+        # calculate the average 
+        total_price = sum(order.price for order in orders)
+        return total_price/len(orders)
